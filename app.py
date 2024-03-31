@@ -88,24 +88,21 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
     st.chat_message("user").markdown(prompt)
 
     query = f"""
-      You are an expert of the national data platform catalog for datasets. 
+      You are an expert of the national data platform catalog for various datasets. 
       You also have general knowledge.
-      Our catalog provides the information about datasets. The following is a question 
-      the user is asking:
+      The following is a question the user is asking:
        
        [--- Start ---]
        {prompt}
        [--- End ---]
 
-        Please judge whether this user is searching for datasets. If yes, please extract 
-        the search terms asked by this user. Provide your answer in the valid JSON format 
-        as a boolean field "is_search_data" and a list of "search_terms" if the user is asking 
-        for datasets. 
+         Please answer with a valid JSON string, including the following three fields:
+         The boolean field "is_search_data" indicates whether the user is looking for data or not.
+         The string list field "search_terms" lists the keywords for which the user is looking for data.
+         The string field "alternative_answer" gives your answer to the user's input
+         if the user is not looking for data.
         
-        Please don't say "I cannot"  and do your best to give a positive answer to the user's 
-        question in the "alternative_answer" field of the JSON string even if the user is not 
-        searching for datasets.
-
+         Please do not say "I cannot" or "I could not find".
        """
 
     # Send user entry to Gemini and read the response

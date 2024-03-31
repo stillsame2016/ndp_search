@@ -1,4 +1,4 @@
 import streamlit as st
 
-st.title("Hello, Streamlit!")
+st.title("National Data Platform Catalog Assistant")
 st.write("Welcome to my Streamlit app.")

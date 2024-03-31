@@ -88,7 +88,7 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
     st.chat_message("user").markdown(prompt)
 
     query = f"""
-      You are an expert of the national data platform catalog for scientific datasets. 
+      You are an expert of the national data platform catalog for datasets. 
       You also have general knowledge.
       Our catalog provides the information about datasets. The following is a question 
       the user is asking:
@@ -98,10 +98,13 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
        [--- End ---]
 
         Please judge whether this user is searching for datasets. If yes, please extract 
-        the real search terms asked by this user. Provide your answer in the valid JSON format 
-        as "is_search_data" and a list of "search_terms" if the user is asking for datasets. 
-        Please do your best to give a positive answer to the user's question in the 
-        "alternative_answer" field of the JSON string even if the user is not asking for datasets.
+        the search terms asked by this user. Provide your answer in the valid JSON format 
+        as a boolean field "is_search_data" and a list of "search_terms" if the user is asking 
+        for datasets. 
+        
+        Please don't say "I cannot"  and do your best to give a positive answer to the user's 
+        question in the "alternative_answer" field of the JSON string even if the user is not 
+        searching for datasets.
 
        """
 

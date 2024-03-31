@@ -102,7 +102,11 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
          The string field "alternative_answer" gives your answer to the user's input
          if the user is not looking for data.
         
-         Please do not say "I cannot" or "I could not find".
+         Please do not say "I cannot" or "I could not find". 
+         
+         Please note that the user's request for datasets may appear in the middle of the text, 
+         do your best to extract the keywords for which the user is searching for datasets.
+         
        """
 
     # Send user entry to Gemini and read the response

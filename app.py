@@ -58,22 +58,25 @@ for message in st.session_state.chat.history:
             st.markdown(prompt)
         else:
             answer = message.parts[0].text
-            print('-'*70, 'OOOPS')
+            print('-'*70, 'raw answer in history')
             print(answer)
 
             if answer.startswith('```json'):
                 json_part = answer.split("\n", 1)[1].rsplit("\n", 1)[0]
                 data = json.loads(json_part)
             else:
-                data = json.loads(data)
+                data = json.loads(answer)
 
-            print('-' * 70)
+            print('-' * 70, 'json answer in history')
             print(data)
 
             if not data["is_search_data"]:
                 assistant_response = data["alternative_answer"]
             else:
-                assistant_response = data["search_terms"]
+                answer = "Searching NDP catalog by the terms:"
+                for term in data['search_terms']:
+                    answer = f"{answer}\n - {term}"
+                assistant_response = answer
 
             st.markdown(assistant_response)
 
@@ -109,20 +112,24 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
     with st.chat_message("assistant"):
 
         data = response.text
-        print('-'*70)
+        print('-'*70, 'raw data')
         print(data)
+
         if data.startswith('```json'):
             json_part = data.split("\n", 1)[1].rsplit("\n", 1)[0]
             data = json.loads(json_part)
         else:
             data = json.loads(data)
 
-        print('-' * 70)
+        print('-' * 70, 'json data')
         print(data)
 
         if not data["is_search_data"]:
             assistant_response = data["alternative_answer"]
         else:
-            assistant_response = data["search_terms"]
+            answer = "Searching NDP catalog by the terms:"
+            for term in data['search_terms']:
+                answer = f"{answer}\n - {term}"
+            assistant_response = answer
 
         st.markdown(assistant_response)

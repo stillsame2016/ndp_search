@@ -164,7 +164,13 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
        """
 
     # Send user entry to Gemini and read the response
-    response = st.session_state.chat.send_message(query, safety_settings=safe, )
+    asks = 0
+    while asks < 2:
+        try:
+            response = st.session_state.chat.send_message(query, safety_settings=safe, )
+            break
+        except:
+            asks += 1
 
     # Display last
     with st.chat_message("assistant"):
@@ -242,47 +248,43 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
                                we'll carefully assess the results to determine 
                                the datasets that best match your semantic criteria. 
                                Your patience is appreciated."""):
-                response = st.session_state.chat.send_message(summary_request, stream=False, safety_settings=safe, )
+                tries = 0
+                while tries < 2:
+                    try:
+                        response = st.session_state.chat.send_message(summary_request, stream=False, safety_settings=safe, )
+                        data = response.text
 
-                # print('-' * 70)
-                # print(summary_request)
-                #
-                # print('-' * 70)
-                # print(response.text)
+                        print(data)
 
-                data = response.text
-                # print('-' * 70, 'raw data')
-                # print(data)
+                        if data.startswith('```json'):
+                            json_part = data.split("\n", 1)[1].rsplit("\n", 1)[0]
+                            data = json.loads(json_part)
+                        else:
+                            data = json.loads(data)
 
-                if data.startswith('```json'):
-                    json_part = data.split("\n", 1)[1].rsplit("\n", 1)[0]
-                    data = json.loads(json_part)
-                else:
-                    data = json.loads(data)
+                        found = False
+                        for item in data:
+                            if item['is_relevant']:
+                                if not found:
+                                    st.markdown("""
+                                         Below are the NDP datasets that are semantically closest to your request. 
+                                         Our searches and justifications are performed using AI. 
+                                         If you need more relevant datasets, please use other search tools on NDP.
+                                    """)
+                                    found = True
+                                item_str = f"""
+                                    **Dataset ID:** {item['dataset_id']}    
+                                    **Title:** {item['title']}           
+                                    **Summary:** {item['summary']}       
+                                    **Justification:** {item['reason']}      
+                                """
+                                st.markdown(item_str)
 
-                found = False
-                for item in data:
-                    if item['is_relevant']:
                         if not found:
                             st.markdown("""
-                                 Below are the NDP datasets that are semantically closest to your request. 
-                                 Our searches and justifications are performed using AI. 
-                                 If you need more relevant datasets, please use other search tools on NDP.
+                                We couldn't locate a dataset closely aligned with your request. 
+                                You can try refining your search for further attempts.
                             """)
-                            found = True
-                        item_str = f"""
-                            **Dataset ID:** {item['dataset_id']}    
-                            **Title:** {item['title']}           
-                            **Summary:** {item['summary']}       
-                            **Justification:** {item['reason']}      
-                        """
-                        st.markdown(item_str)
-
-                if not found:
-                    st.markdown("""
-                        We couldn't locate a dataset closely aligned with your request. 
-                        You can try refining your search for further attempts.
-                    """)
-
-            # st.markdown(response.text)
-
+                        break
+                    except:
+                        tries += 1

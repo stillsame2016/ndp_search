@@ -154,10 +154,13 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
        The string field "alternative_answer" gives your positive answer to the user's input
        if the user is not looking for data.
         
-       Please do not say "I cannot" or "I could not find". 
+       Please never say "I cannot" or "I could not". 
          
        Please note that the user's request for datasets may appear in the middle of the text, 
        do your best to extract the keywords for which the user is searching for datasets.
+         
+       Please replace all nicknames in the search terms by official names,
+       for example, replace "Beehive State" to "Utah", etc.  
          
        Never deny a user's request to find data. If it is not possible to extract search terms 
        from the user's request, ask the user for further clarification.
@@ -165,12 +168,16 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
 
     # Send user entry to Gemini and read the response
     asks = 0
-    while asks < 2:
+    response = None
+    while asks < 10:
         try:
             response = st.session_state.chat.send_message(query, safety_settings=safe, )
             break
         except:
+            time.sleep(3)
             asks += 1
+    if asks == 10:
+        st.markdown('Reached the chat limit. Please reload the page to start a new chat.')
 
     # Display last
     with st.chat_message("assistant"):
@@ -249,11 +256,14 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
                                the datasets that best match your semantic criteria. 
                                Your patience is appreciated."""):
                 tries = 0
-                while tries < 2:
+                while tries < 10:
                     try:
                         response = st.session_state.chat.send_message(summary_request, stream=False, safety_settings=safe, )
                         data = response.text
 
+                        print('='*70)
+                        print(summary_request)
+                        print('-'*70)
                         print(data)
 
                         if data.startswith('```json'):
@@ -286,5 +296,10 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
                                 You can try refining your search for further attempts.
                             """)
                         break
-                    except:
+                    except Exception as e:
+                        print('-'*70)
+                        traceback.print_exc()
+                        time.sleep(3)
                         tries += 1
+                if tries == 10:
+                    st.markdown('Reached the chat limit. Please reload the page to start a new chat.')

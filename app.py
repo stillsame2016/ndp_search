@@ -303,3 +303,4 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
                         tries += 1
                 if tries == 5:
                     st.markdown('Reached the chat limit. Please reload the page to start a new chat.')
+

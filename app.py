@@ -179,7 +179,7 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
             time.sleep(3)
             asks += 1
     if asks == 5:
-        st.markdown('Reached the chat limit. Please reload the page to start a new chat.')
+        st.markdown('This chat has reached the limit on the total number of tokens. Please reload the page to start a new chat.')
 
     # Display last
     with st.chat_message("assistant"):
@@ -304,5 +304,5 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
                         time.sleep(3)
                         tries += 1
                 if tries == 5:
-                    st.markdown('Reached the chat limit. Please reload the page to start a new chat.')
+                    st.markdown('This chat has reached the limit on the total number of tokens. Please reload the page to start a new chat.')
 

@@ -169,14 +169,14 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
     # Send user entry to Gemini and read the response
     asks = 0
     response = None
-    while asks < 10:
+    while asks < 5:
         try:
             response = st.session_state.chat.send_message(query, safety_settings=safe, )
             break
         except:
             time.sleep(3)
             asks += 1
-    if asks == 10:
+    if asks == 5:
         st.markdown('Reached the chat limit. Please reload the page to start a new chat.')
 
     # Display last
@@ -256,15 +256,15 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
                                the datasets that best match your semantic criteria. 
                                Your patience is appreciated."""):
                 tries = 0
-                while tries < 10:
+                while tries < 5:
                     try:
                         response = st.session_state.chat.send_message(summary_request, stream=False, safety_settings=safe, )
                         data = response.text
 
-                        print('='*70)
-                        print(summary_request)
-                        print('-'*70)
-                        print(data)
+                        # print('='*70)
+                        # print(summary_request)
+                        # print('-'*70)
+                        # print(data)
 
                         if data.startswith('```json'):
                             json_part = data.split("\n", 1)[1].rsplit("\n", 1)[0]
@@ -301,5 +301,5 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
                         traceback.print_exc()
                         time.sleep(3)
                         tries += 1
-                if tries == 10:
+                if tries == 5:
                     st.markdown('Reached the chat limit. Please reload the page to start a new chat.')

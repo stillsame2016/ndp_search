@@ -290,7 +290,7 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
                 Please note that the description may contain the state abbreviation which can be used to exclude 
                 datasets. For example, TX usually indicates Texas.
                 
-                Images and Lidar data are raster data and not vector data.
+                Images and Lidar and DEM data are raster data and not vector data.
                 
                 If the user requests data for a special region, make sure the region condition is satisfied.
                 If the user requests data for a special type, make sure the type condition is satisfied.

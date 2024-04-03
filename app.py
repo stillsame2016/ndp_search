@@ -53,12 +53,52 @@ def justification_markdown(justification_data):
                             If you need more relevant datasets, please use other search tools on NDP.
                             """)
                 found_dataset = True
-            st.markdown(f"""
-                        **Dataset ID:** {dataset['dataset_id']}    
-                        **Title:** {dataset['title']}           
-                        **Summary:** {dataset['summary']}       
-                        **Justification:** {dataset['reason']}      
-                        """)
+
+            with st.container():
+                st.markdown(f"""
+                                                   <hr style="margin: 5px 0px 15px 0px; padding: 0px;" />
+                                                   <table style="border: none; margin-bottom: 5pt;">
+                                                      <tr style="border: none;">
+                                                          <td style="vertical-align: top; border: none; font-weight: bold; margin: 0px; padding: 0px 8px;">
+                                                               Dataset ID:
+                                                          </td>
+                                                          <td style="vertical-align: top; border: none;  margin: 0px 5px; padding: 0px;">
+                                                               {dataset['dataset_id']}
+                                                          </td>
+                                                      </tr>
+                                                      <tr style="border: none;">
+                                                          <td style="vertical-align: top; border: none; font-weight: bold; margin: 0px; padding: 0px 8px;">
+                                                               Title:
+                                                          </td>
+                                                          <td style="vertical-align: top; border: none;  margin: 0px; margin: 0px 5px; padding: 0px;">
+                                                               {dataset['title']}
+                                                           </td>
+                                                      </tr>
+                                                      <tr style="border: none;">
+                                                          <td style="vertical-align: top; border: none; font-weight: bold; margin: 0px; padding: 0px 8px;">
+                                                               Summary:
+                                                           </td>
+                                                          <td style="vertical-align: top; border: none; margin: 0px 5px; padding: 0px;">
+                                                               {dataset['summary']}
+                                                          </td>
+                                                      </tr>
+                                                      <tr style="border: none;">
+                                                          <td style="vertical-align: top; border: none; font-weight: bold; margin: 0px; padding: 0px 8px;">
+                                                               Justification:
+                                                           </td>
+                                                          <td style="vertical-align: top; border: none; margin: 0px 5px; padding: 0px;">
+                                                               {dataset['reason']}
+                                                          </td>
+                                                      </tr>
+                                                   </table>
+                                               """, unsafe_allow_html=True)
+
+            # st.markdown(f"""
+            #             **Dataset ID:** {dataset['dataset_id']}
+            #             **Title:** {dataset['title']}
+            #             **Summary:** {dataset['summary']}
+            #             **Justification:** {dataset['reason']}
+            #             """)
 
     if not found_dataset:
         st.markdown(f"""
@@ -135,6 +175,7 @@ for message in st.session_state.chat.history:
 
 # Accept user's next message, add to context, resubmit context to Gemini
 if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have questions? Just ask!"):
+
     # Display user's last message
     st.chat_message("user").markdown(prompt)
 
@@ -180,6 +221,7 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
             asks += 1
     if asks == 5:
         st.markdown('This chat has reached the limit on the total number of tokens. Please reload the page to start a new chat.')
+        st.stop()
 
     # Display last
     with st.chat_message("assistant"):
@@ -284,13 +326,52 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
                                          If you need more relevant datasets, please use other search tools on NDP.
                                     """)
                                     found = True
-                                item_str = f"""
-                                    **Dataset ID:** {item['dataset_id']}    
-                                    **Title:** {item['title']}           
-                                    **Summary:** {item['summary']}       
-                                    **Justification:** {item['reason']}      
-                                """
-                                st.markdown(item_str)
+
+                                with st.container():
+                                    st.markdown(f"""
+                                        <hr style="margin: 5px 0px 15px 0px; padding: 0px;" />
+                                        <table style="border: none; margin-bottom: 5pt;">
+                                           <tr style="border: none;">
+                                               <td style="vertical-align: top; border: none; font-weight: bold; margin: 0px; padding: 0px 8px;">
+                                                    Dataset ID:
+                                               </td>
+                                               <td style="vertical-align: top; border: none;  margin: 0px 5px; padding: 0px;">
+                                                    {item['dataset_id']}
+                                               </td>
+                                           </tr>
+                                           <tr style="border: none;">
+                                               <td style="vertical-align: top; border: none; font-weight: bold; margin: 0px; padding: 0px 8px;">
+                                                    Title:
+                                               </td>
+                                               <td style="vertical-align: top; border: none;  margin: 0px; margin: 0px 5px; padding: 0px;">
+                                                    {item['title']}
+                                                </td>
+                                           </tr>
+                                           <tr style="border: none;">
+                                               <td style="vertical-align: top; border: none; font-weight: bold; margin: 0px; padding: 0px 8px;">
+                                                    Summary:
+                                                </td>
+                                               <td style="vertical-align: top; border: none; margin: 0px 5px; padding: 0px;">
+                                                    {item['summary']}
+                                               </td>
+                                           </tr>
+                                           <tr style="border: none;">
+                                               <td style="vertical-align: top; border: none; font-weight: bold; margin: 0px; padding: 0px 8px;">
+                                                    Justification:
+                                                </td>
+                                               <td style="vertical-align: top; border: none; margin: 0px 5px; padding: 0px;">
+                                                    {item['reason']}
+                                               </td>
+                                           </tr>
+                                        </table>
+                                    """, unsafe_allow_html=True)
+
+                                    # st.markdown(f"""
+                                    #     **Dataset ID:** {item['dataset_id']}
+                                    #     **Title:**  {item['title']}
+                                    #     **Summary:**  {item['summary']}
+                                    #     **Justification:** {item['reason']}
+                                    # """)
 
                         if not found:
                             st.markdown("""
@@ -305,4 +386,4 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
                         tries += 1
                 if tries == 5:
                     st.markdown('This chat has reached the limit on the total number of tokens. Please reload the page to start a new chat.')
-
+                    st.stop()

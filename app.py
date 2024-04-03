@@ -56,42 +56,42 @@ def justification_markdown(justification_data):
 
             with st.container():
                 st.markdown(f"""
-                                                   <hr style="margin: 5px 0px 15px 0px; padding: 0px;" />
-                                                   <table style="border: none; margin-bottom: 5pt;">
-                                                      <tr style="border: none;">
-                                                          <td style="vertical-align: top; border: none; font-weight: bold; margin: 0px; padding: 0px 8px;">
-                                                               Dataset ID:
-                                                          </td>
-                                                          <td style="vertical-align: top; border: none;  margin: 0px 5px; padding: 0px;">
-                                                               {dataset['dataset_id']}
-                                                          </td>
-                                                      </tr>
-                                                      <tr style="border: none;">
-                                                          <td style="vertical-align: top; border: none; font-weight: bold; margin: 0px; padding: 0px 8px;">
-                                                               Title:
-                                                          </td>
-                                                          <td style="vertical-align: top; border: none;  margin: 0px; margin: 0px 5px; padding: 0px;">
-                                                               {dataset['title']}
-                                                           </td>
-                                                      </tr>
-                                                      <tr style="border: none;">
-                                                          <td style="vertical-align: top; border: none; font-weight: bold; margin: 0px; padding: 0px 8px;">
-                                                               Summary:
-                                                           </td>
-                                                          <td style="vertical-align: top; border: none; margin: 0px 5px; padding: 0px;">
-                                                               {dataset['summary']}
-                                                          </td>
-                                                      </tr>
-                                                      <tr style="border: none;">
-                                                          <td style="vertical-align: top; border: none; font-weight: bold; margin: 0px; padding: 0px 8px;">
-                                                               Justification:
-                                                           </td>
-                                                          <td style="vertical-align: top; border: none; margin: 0px 5px; padding: 0px;">
-                                                               {dataset['reason']}
-                                                          </td>
-                                                      </tr>
-                                                   </table>
-                                               """, unsafe_allow_html=True)
+                   <hr style="margin: 5px 0px 15px 0px; padding: 0px;" />
+                   <table style="border: none; margin-bottom: 5pt;">
+                      <tr style="border: none;">
+                          <td style="vertical-align: top; border: none; font-weight: bold; margin: 0px; padding: 0px 8px;">
+                               Dataset ID:
+                          </td>
+                          <td style="vertical-align: top; border: none;  margin: 0px 5px; padding: 0px;">
+                               {dataset['dataset_id']}
+                          </td>
+                      </tr>
+                      <tr style="border: none;">
+                          <td style="vertical-align: top; border: none; font-weight: bold; margin: 0px; padding: 0px 8px;">
+                               Title:
+                          </td>
+                          <td style="vertical-align: top; border: none;  margin: 0px; margin: 0px 5px; padding: 0px;">
+                               {dataset['title']}
+                           </td>
+                      </tr>
+                      <tr style="border: none;">
+                          <td style="vertical-align: top; border: none; font-weight: bold; margin: 0px; padding: 0px 8px;">
+                               Summary:
+                           </td>
+                          <td style="vertical-align: top; border: none; margin: 0px 5px; padding: 0px;">
+                               {dataset['summary']}
+                          </td>
+                      </tr>
+                      <tr style="border: none;">
+                          <td style="vertical-align: top; border: none; font-weight: bold; margin: 0px; padding: 0px 8px;">
+                               Justification:
+                           </td>
+                          <td style="vertical-align: top; border: none; margin: 0px 5px; padding: 0px;">
+                               {dataset['reason']}
+                          </td>
+                      </tr>
+                   </table>
+                """, unsafe_allow_html=True)
 
             # st.markdown(f"""
             #             **Dataset ID:** {dataset['dataset_id']}
@@ -220,7 +220,8 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
             time.sleep(3)
             asks += 1
     if asks == 5:
-        st.markdown('This chat has reached the limit on the total number of tokens. Please reload the page to start a new chat.')
+        st.markdown(
+            'This chat has reached the limit on the total number of tokens. Please reload the page to start a new chat.')
         st.stop()
 
     # Display last
@@ -289,6 +290,11 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
                 Please note that the description may contain the state abbreviation which can be used to exclude 
                 datasets. For example, TX usually indicates Texas.
                 
+                Images and Lidar data are raster data and not vector data.
+                
+                If the user requests data for a special region, make sure the region condition is satisfied.
+                If the user requests data for a special type, make sure the type condition is satisfied.
+                
                 If the description contains latitude and longitude, please use them to exclude datasets.
             
                 Please note that fire simulation is not earthquake simulation.
@@ -302,7 +308,8 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
                 tries = 0
                 while tries < 5:
                     try:
-                        response = st.session_state.chat.send_message(summary_request, stream=False, safety_settings=safe, )
+                        response = st.session_state.chat.send_message(summary_request, stream=False,
+                                                                      safety_settings=safe, )
                         data = response.text
 
                         # print('='*70)
@@ -380,10 +387,11 @@ if prompt := st.chat_input("I'm the NDP Catalog Assistant. Need data or have que
                             """)
                         break
                     except Exception as e:
-                        print('-'*70)
+                        print('-' * 70)
                         traceback.print_exc()
                         time.sleep(3)
                         tries += 1
                 if tries == 5:
-                    st.markdown('This chat has reached the limit on the total number of tokens. Please reload the page to start a new chat.')
+                    st.markdown(
+                        'This chat has reached the limit on the total number of tokens. Please reload the page to start a new chat.')
                     st.stop()
